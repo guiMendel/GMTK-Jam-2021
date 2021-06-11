@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 4080670913607701206}
   - component: {fileID: 4080670913607701205}
   - component: {fileID: 7176768790299351097}
-  m_Layer: 0
+  - component: {fileID: -3223800320510258503}
+  m_Layer: 7
   m_Name: W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,4 +146,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fd68f624c4aff342874decccde5216e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpPower: 7
+  jumpPower: 500
+--- !u!114 &-3223800320510258503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4080670913607701204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd46e6143fab7fb418d2b7accf481c11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

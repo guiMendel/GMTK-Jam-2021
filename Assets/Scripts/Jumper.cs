@@ -5,25 +5,10 @@ using UnityEngine;
 
 public class Jumper : MonoBehaviour
 {
-  [SerializeField] float jumpPower = 4f;
+  [SerializeField] float jumpPower = 1000f;
 
-  // stored refs
-  Rigidbody2D body;
-
-  // Start is called before the first frame update
-  void Start()
+  public void Jump(Rigidbody2D body)
   {
-    body = GetComponent<Rigidbody2D>();
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
-    if (Input.GetButtonDown("Jump")) Jump();
-  }
-
-  private void Jump()
-  {
-    body.velocity = transform.up * jumpPower;
+    body.AddForce(Vector2.up * jumpPower);
   }
 }
