@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MergeJudge : MonoBehaviour
 {
+  public static float snapGap = 0.1f; 
+
   // state
   List<(Attacher, Attacher)> awaitingMerge;
 
