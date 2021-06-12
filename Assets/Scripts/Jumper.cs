@@ -9,6 +9,6 @@ public class Jumper : MonoBehaviour
 
   public void Jump(Rigidbody2D body)
   {
-    body.AddForce(Vector2.up * jumpPower);
+    body.velocity += Vector2.up * jumpPower;
   }
 }

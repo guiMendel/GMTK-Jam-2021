@@ -20,8 +20,8 @@ public class Attacher : MonoBehaviour
 
     // we need to snap this attacher to the merger's attacher
 
-    // disable collision between the two
-    Physics2D.IgnoreCollision(GetComponent<Collider2D>(), merger.GetComponent<Collider2D>());
+    // // disable collision between the two
+    // Physics2D.IgnoreCollision(GetComponent<Collider2D>(), merger.GetComponent<Collider2D>());
 
     // snap to it
     SnapTo(merger.transform);
@@ -41,9 +41,8 @@ public class Attacher : MonoBehaviour
     mainParent.transform.parent = merger.transform;
 
     // disable rigidbody's physics
-    Rigidbody2D body = mainParent.GetComponent<Rigidbody2D>();
-    body.velocity = Vector2.zero;
-    body.isKinematic = true;
+    // Rigidbody2D body = mainParent.GetComponent<Rigidbody2D>();
+    // body.velocity = Vector2.zero;
 
     // GetComponent<Collider2D>().enabled = false;
 
@@ -82,6 +81,26 @@ public class Attacher : MonoBehaviour
 
     // snap
     GetController().transform.Translate(displacement);
+
+    // create a joint between the two
+    CreateJointWith(otherTransform);
+  }
+
+  private void CreateJointWith(Transform otherTransform)
+  {
+    FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
+
+    // prevent collision
+    joint.enableCollision = false;
+
+    // use default anchors
+    joint.autoConfigureConnectedAnchor = true;
+
+    // adjust springyness
+    joint.dampingRatio = 1;
+
+    // connect to other rigid body
+    joint.connectedBody = otherTransform.GetComponent<Rigidbody2D>();
   }
 
   private void Start()
@@ -96,8 +115,18 @@ public class Attacher : MonoBehaviour
     Attacher otherAttacher = other.gameObject.GetComponent<Attacher>();
     if (otherAttacher)
     {
+      print("blam");
       // when the other attacher request a merge too, the mergeJudge will merge them both
       FindObjectOfType<MergeJudge>().MergeRequest(this, otherAttacher);
     }
+  }
+
+  private void OnCollisionStay2D(Collision2D other)
+  {
+    if (other.gameObject.CompareTag("Debug"))
+    {
+      GetController().GetComponent<Rigidbody2D>().velocity *= new Vector2(1, 0);
+    }
+
   }
 }
