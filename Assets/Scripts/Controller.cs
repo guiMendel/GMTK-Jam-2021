@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-  [Tooltip("Controllers with higher priority become parents when merging with other controllers")]
+  [Tooltip("Controllers with higher priority become parents when merging with other controllers. Has less precendence than movement priority.")]
   [SerializeField] int mergePriority = 0;
 
   // stored refs
@@ -23,7 +24,9 @@ public class Controller : MonoBehaviour
   void Update()
   {
     // take commands
+    // jump command
     if (Input.GetButtonDown("Jump")) Jump();
+    // walk command. Registers if character is walking or not
     if (Input.GetAxis("Horizontal") != 0) Walk(Input.GetAxis("Horizontal"));
     if (Input.GetButtonDown("Fire1")) Fire();
   }
@@ -44,7 +47,59 @@ public class Controller : MonoBehaviour
   private void Jump()
   {
     // find a jumper
-    GetComponentInChildren<Jumper>()?.Jump(body);
+    Jumper jumper = GetComponentInChildren<Jumper>();
+
+    // make sure characer is grounded
+    if (jumper && IsGrounded()) jumper.Jump(body);
+  }
+
+  private bool IsGrounded()
+  {
+    // take all colliders
+    Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
+
+    print("all colliders length: " + colliders.Length.ToString());
+
+    // minimum height
+    float height = float.MaxValue;
+
+    // pick the downmost ones
+    List<Collider2D> downmostColliders = new List<Collider2D>();
+
+    foreach (Collider2D collider in colliders)
+    {
+      float colliderHeight = collider.transform.position.y;
+
+      if (colliderHeight < height)
+      {
+        height = colliderHeight;
+
+        // flush all previous results
+        downmostColliders.Clear();
+
+        downmostColliders.Add(collider);
+      }
+      else if (colliderHeight == height) downmostColliders.Add(collider);
+    }
+
+    print("filtered colliders length: " + downmostColliders.Count.ToString());
+
+
+    // if at least one of the colliders is grounded, we return true
+    return downmostColliders.Any((Collider2D collider) =>
+    {
+      // get the collider's size
+      float colliderSize = collider.bounds.extents.y;
+
+      // margin of distance between character and ground we accept
+      float errorMargin = 0.1f;
+
+      print("collider size: " + colliderSize.ToString());
+      print("probe: " + (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0).ToString());
+
+      // probe the ground
+      return (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0);
+    });
   }
 
   private void OnCollisionEnter2D(Collision2D other)
@@ -59,7 +114,8 @@ public class Controller : MonoBehaviour
     Controller otherController = otherObject.GetComponent<Controller>();
 
     // stops if the other has higher priority
-    if (otherController.GetPriority() > mergePriority) {
+    if (otherController.GetPriority() > mergePriority)
+    {
       enabled = false;
       return;
     }
