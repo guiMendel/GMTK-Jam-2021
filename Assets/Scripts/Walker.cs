@@ -6,11 +6,13 @@ public class Walker : MonoBehaviour
 {
   [SerializeField] float speed = 4f;
 
-  public void Walk(Transform target, float movement)
+  public void Walk(Rigidbody2D body, float movement)
   {
-    float displacement = movement * speed * Time.deltaTime;
-    
+    float displacement = movement * speed * Time.fixedDeltaTime;
+
     // Apply movement
-    target.Translate(displacement, 0, 0);
+    body.velocity = new Vector2(displacement, body.velocity.y);
+    // body.AddForce(displacement * Vector2.right);
+    // body.MovePosition((Vector2)body.transform.position + displacement);
   }
 }

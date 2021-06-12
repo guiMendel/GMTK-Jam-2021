@@ -10,11 +10,11 @@ public class Controller : MonoBehaviour
   Rigidbody2D body;
 
   // state
-  bool moving = false;
+  float movement;
   // Update sets this and FixedUpdate reads from and resets it
   bool jumpInThisUpdate = false;
 
-  public bool IsMoving() { return moving; }
+  public bool IsMoving() { return movement != 0; }
 
   public float GetTotalMass()
   {
@@ -39,9 +39,8 @@ public class Controller : MonoBehaviour
     // jump command
     if (Input.GetButtonDown("Jump")) jumpInThisUpdate = true;
 
-    // walk command. Registers if character is walking or not
-    if (Input.GetAxis("Horizontal") != 0) moving = Walk(Input.GetAxis("Horizontal"));
-    else moving = false;
+    // walk command
+    movement = Input.GetAxis("Horizontal");
 
     // fire command
     if (Input.GetButtonDown("Fire1")) Fire();
@@ -49,6 +48,7 @@ public class Controller : MonoBehaviour
 
   private void FixedUpdate()
   {
+    Walk();
     if (jumpInThisUpdate)
     {
       Jump();
@@ -62,21 +62,10 @@ public class Controller : MonoBehaviour
     GetComponentInChildren<Shooter>()?.Fire(transform.position);
   }
 
-  private bool Walk(float movement)
+  private void Walk()
   {
-    // find a walker
-    Walker walker;
-
-    if (movement > 0) walker = GetComponentInChildren<RightWalker>();
-    else walker = GetComponentInChildren<LeftWalker>();
-
-    // there may not be walkers in this character
-    if (walker)
-    {
-      walker.Walk(transform, movement);
-      return true;
-    }
-    return false;
+    if (movement >= 0) GetComponentInChildren<RightWalker>()?.Walk(body, movement);
+    if (movement <= 0) GetComponentInChildren<LeftWalker>()?.Walk(body, movement);
   }
 
   private void Jump()
