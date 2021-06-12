@@ -44,7 +44,7 @@ public class Controller : MonoBehaviour
   private void Fire()
   {
     // find a shooter
-    GetComponentInChildren<Shooter>()?.Fire();
+    GetComponentInChildren<Shooter>()?.Fire(transform.position);
   }
 
   private bool Walk(float movement)
