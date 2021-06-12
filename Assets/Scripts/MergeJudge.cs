@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MergeJudge : MonoBehaviour
 {
-  public static float snapGap = 0.1f; 
+  public static float snapGap = 0.2f;
 
   // state
   List<(Attacher, Attacher)> awaitingMerge;
@@ -70,13 +70,13 @@ public class MergeJudge : MonoBehaviour
     Controller controller1 = attacher1.GetController();
     Controller controller2 = attacher2.GetController();
 
-    // grounded characters have higher priority
-    bool attacher1Grounded = controller1.IsGrounded(), attacher2Grounded = controller2.IsGrounded();
+    // characters below have higher priority
+    float attacher1Height = controller1.transform.position.y, attacher2Height = controller2.transform.position.y;
 
-    // print("grounded1: " + attacher1Grounded + ", grounded2: " + attacher2Grounded);
+    // print("height1: " + attacher1Height + ", height2: " + attacher2Height);
 
-    if (!attacher1Grounded && attacher2Grounded) return (attacher2, attacher1);
-    else if (attacher1Grounded && !attacher2Grounded) return (attacher1, attacher2);
+    if (attacher1Height > attacher2Height) return (attacher2, attacher1);
+    else if (attacher1Height < attacher2Height) return (attacher1, attacher2);
 
     // moving characters have second higher priority
     bool attacher1Moving = controller1.IsMoving(), attacher2Moving = controller2.IsMoving();

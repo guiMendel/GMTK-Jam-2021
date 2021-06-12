@@ -73,7 +73,7 @@ public class Controller : MonoBehaviour
     // take all colliders
     Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
 
-    // print("all colliders length: " + colliders.Length.ToString());
+    print("all colliders length: " + colliders.Length.ToString());
 
     // minimum height
     float height = float.MaxValue;
@@ -97,7 +97,8 @@ public class Controller : MonoBehaviour
       else if (colliderHeight == height) downmostColliders.Add(collider);
     }
 
-    // print("filtered colliders length: " + downmostColliders.Count.ToString());
+    print("filtered colliders length: " + downmostColliders.Count.ToString());
+    print("filtered colliders sample: " + downmostColliders[0].GetComponent<Attacher>().GetPriority());
 
     // if at least one of the colliders is grounded, we return true
     return downmostColliders.Any((Collider2D collider) =>
@@ -108,9 +109,7 @@ public class Controller : MonoBehaviour
       // margin of distance between character and ground we accept
       float errorMargin = 0.1f;
 
-      // print("collider size: " + colliderSize.ToString());
-
-      // print("probe: " + (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0).ToString());
+      print("probe: " + (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0).ToString());
 
       // probe the ground
       return (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0);

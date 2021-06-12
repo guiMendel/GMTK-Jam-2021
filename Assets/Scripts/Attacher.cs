@@ -34,6 +34,9 @@ public class Attacher : MonoBehaviour
     body.velocity = Vector2.zero;
     GetComponent<Rigidbody2D>().isKinematic = true;
 
+    // disable collision between the two
+    Physics2D.IgnoreCollision(GetComponent<Collider2D>(), merger.GetComponent<Collider2D>());
+
     // snap to it
     SnapTo(merger.transform);
 
