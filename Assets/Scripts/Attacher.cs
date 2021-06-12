@@ -8,10 +8,6 @@ public class Attacher : MonoBehaviour
   [Tooltip("Attachers with higher priority become parents when merging with other attachers. Has less precendence than movement priority.")]
   [SerializeField] int mergePriority = 0;
 
-  // state
-  // used to keep distance relative to parent always locked
-  Vector3 lockedPosition;
-
   // controller getter
   public Func<Controller> GetController;
 
@@ -56,35 +52,36 @@ public class Attacher : MonoBehaviour
 
   private void SnapTo(Transform otherTransform)
   {
-    float yDistance = otherTransform.position.y - transform.position.y;
-    float xDistance = otherTransform.position.x - transform.position.x;
+    // float yDistance = otherTransform.position.y - transform.position.y;
+    // float xDistance = otherTransform.position.x - transform.position.x;
 
-    // the side to which we will snap
-    Vector2 side;
+    // // the side to which we will snap
+    // Vector2 side;
 
-    // snap to the sides
-    if (Mathf.Abs(yDistance) < Mathf.Abs(xDistance))
-    {
-      side = xDistance < 0 ? Vector2.right : Vector2.left;
-    }
-    // snap above or below
-    else
-    {
-      side = yDistance < 0 ? Vector2.up : Vector2.down;
-    }
+    // // snap to the sides
+    // if (Mathf.Abs(yDistance) < Mathf.Abs(xDistance))
+    // {
+    //   side = xDistance < 0 ? Vector2.right : Vector2.left;
+    // }
+    // // snap above or below
+    // else
+    // {
+    //   side = yDistance < 0 ? Vector2.up : Vector2.down;
+    // }
 
-    // adjust the bigger distance to be exactly on the edge of the collider
-    float otherExtent = otherTransform.GetComponent<Collider2D>().bounds.extents.x;
-    float desiredDistance = otherExtent + GetComponent<Collider2D>().bounds.extents.x;
-    desiredDistance += MergeJudge.snapGap;
+    // // adjust the bigger distance to be exactly on the edge of the collider
+    // float otherExtent = otherTransform.GetComponent<Collider2D>().bounds.extents.x;
+    // float desiredDistance = otherExtent + GetComponent<Collider2D>().bounds.extents.x;
+    // desiredDistance += MergeJudge.snapGap;
 
-    lockedPosition = otherTransform.position + (Vector3)side * desiredDistance;
+    // var desiredPosition = otherTransform.position + (Vector3)side * desiredDistance;
 
-    // now that we know where this object should be, we translate the parent so that it gets there
-    Vector3 displacement = lockedPosition - transform.position;
+    // // now that we know where this object should be, we translate the parent so that it gets there
+    // Vector2 displacement = (Vector2)(desiredPosition - transform.position);
 
-    // snap
-    GetController().transform.Translate(displacement);
+    // // snap
+    // Rigidbody2D controllerBody = GetController().GetComponent<Rigidbody2D>();
+    // controllerBody.MovePosition((Vector2)controllerBody.transform.position + displacement);
 
     // create a joint between the two
     CreateJointWith(otherTransform);
