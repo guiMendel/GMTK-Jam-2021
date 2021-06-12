@@ -8,37 +8,42 @@ public class Attacher : MonoBehaviour
   [Tooltip("Attachers with higher priority become parents when merging with other attachers. Has less precendence than movement priority.")]
   [SerializeField] int mergePriority = 0;
 
-  // stored refs
-  Controller controller;
+  // controller getter
+  public Func<Controller> GetController;
 
   public int GetPriority() { return mergePriority; }
-
-  public Controller GetController() { return controller; }
 
   // attach to the other object
   public void AttachTo(Attacher merger)
   {
     print("merging " + GetPriority() + " to " + merger.GetPriority());
 
-    // disable controller
-    controller.enabled = false;
-
-    // use other's controller as own
-    controller = merger.GetController();
-
-    // use other as parent
-    transform.parent = merger.transform;
-
-    // disable rigidbody's physics
-    Rigidbody2D body = GetComponent<Rigidbody2D>();
-    body.velocity = Vector2.zero;
-    GetComponent<Rigidbody2D>().isKinematic = true;
+    // we need to snap this attacher to the merger's attacher
 
     // disable collision between the two
     Physics2D.IgnoreCollision(GetComponent<Collider2D>(), merger.GetComponent<Collider2D>());
 
     // snap to it
     SnapTo(merger.transform);
+
+    // Now we need to set this attacher's main parent as a child of the merger's main parent
+
+    // attach this controller's game object as a child to the merger's controller
+    GameObject mainParent = GetController().gameObject;
+
+    // disable current controller
+    GetController().enabled = false;
+
+    // make the mainParent's controller getter point to the new controller
+    mainParent.GetComponent<Attacher>().GetController = merger.GetController;
+
+    // use other as parent
+    mainParent.transform.parent = merger.transform;
+
+    // disable rigidbody's physics
+    Rigidbody2D body = mainParent.GetComponent<Rigidbody2D>();
+    body.velocity = Vector2.zero;
+    body.isKinematic = true;
 
     // GetComponent<Collider2D>().enabled = false;
 
@@ -72,13 +77,17 @@ public class Attacher : MonoBehaviour
 
     Vector3 desiredPosition = otherTransform.position + (Vector3)side * desiredDistance;
 
+    // now that we know where this object should be, we translate the parent so that it gets there
+    Vector3 displacement = desiredPosition - transform.position;
+
     // snap
-    transform.position = desiredPosition;
+    GetController().transform.Translate(displacement);
   }
 
   private void Start()
   {
-    controller = GetComponent<Controller>();
+    // initially, just returns own controller
+    GetController = GetComponent<Controller>;
   }
 
   private void OnCollisionEnter2D(Collision2D other)
