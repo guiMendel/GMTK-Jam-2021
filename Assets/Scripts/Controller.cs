@@ -12,7 +12,12 @@ public class Controller : MonoBehaviour
   // stored refs
   Rigidbody2D body;
 
+  // state
+  bool moving = false;
+
   public int GetPriority() { return mergePriority; }
+
+  public bool IsMoving() { return moving; }
 
   // Start is called before the first frame update
   void Start()
@@ -24,10 +29,15 @@ public class Controller : MonoBehaviour
   void Update()
   {
     // take commands
+
     // jump command
     if (Input.GetButtonDown("Jump")) Jump();
+
     // walk command. Registers if character is walking or not
-    if (Input.GetAxis("Horizontal") != 0) Walk(Input.GetAxis("Horizontal"));
+    if (Input.GetAxis("Horizontal") != 0) moving = Walk(Input.GetAxis("Horizontal"));
+    else moving = false;
+
+    // fire command
     if (Input.GetButtonDown("Fire1")) Fire();
   }
 
@@ -37,11 +47,21 @@ public class Controller : MonoBehaviour
     GetComponentInChildren<Shooter>()?.Fire();
   }
 
-  private void Walk(float movement)
+  private bool Walk(float movement)
   {
     // find a walker
-    if (movement > 0) GetComponentInChildren<RightWalker>()?.Walk(transform, movement);
-    else GetComponentInChildren<LeftWalker>()?.Walk(transform, movement);
+    Walker walker;
+
+    if (movement > 0) walker = GetComponentInChildren<RightWalker>();
+    else walker = GetComponentInChildren<LeftWalker>();
+
+    // there may not be walkers in this character
+    if (walker)
+    {
+      walker.Walk(transform, movement);
+      return true;
+    }
+    return false;
   }
 
   private void Jump()
@@ -53,12 +73,10 @@ public class Controller : MonoBehaviour
     if (jumper && IsGrounded()) jumper.Jump(body);
   }
 
-  private bool IsGrounded()
+  public bool IsGrounded()
   {
     // take all colliders
     Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
-
-    print("all colliders length: " + colliders.Length.ToString());
 
     // minimum height
     float height = float.MaxValue;
@@ -82,9 +100,6 @@ public class Controller : MonoBehaviour
       else if (colliderHeight == height) downmostColliders.Add(collider);
     }
 
-    print("filtered colliders length: " + downmostColliders.Count.ToString());
-
-
     // if at least one of the colliders is grounded, we return true
     return downmostColliders.Any((Collider2D collider) =>
     {
@@ -93,9 +108,6 @@ public class Controller : MonoBehaviour
 
       // margin of distance between character and ground we accept
       float errorMargin = 0.1f;
-
-      print("collider size: " + colliderSize.ToString());
-      print("probe: " + (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0).ToString());
 
       // probe the ground
       return (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0);
@@ -114,8 +126,7 @@ public class Controller : MonoBehaviour
     Controller otherController = otherObject.GetComponent<Controller>();
 
     // stops if the other has higher priority
-    if (otherController.GetPriority() > mergePriority)
-    {
+    if (!HigherPriorityThan(otherController)) {
       enabled = false;
       return;
     }
@@ -131,5 +142,31 @@ public class Controller : MonoBehaviour
 
     // disable its collider
     otherObject.GetComponent<BoxCollider2D>().enabled = false;
+  }
+
+  private bool HigherPriorityThan(Controller otherController)
+  {
+    // grounded characters have higher priority
+    bool selfGrounded = IsGrounded(), otherGrounded = otherController.IsGrounded();
+
+    // if self isnt grounded but other is
+    if (!selfGrounded && otherGrounded) return false;
+    // if self is grounded and other isnt
+    else if (selfGrounded && !otherGrounded) return true;
+
+    // moving characters have second higher priority
+    bool otherMoving = otherController.IsMoving();
+
+    // if self isnt moving but other is
+    if (!moving && otherMoving) return false;
+    // if self is moving and other isnt
+    else if (moving && !otherMoving) return true;
+
+    // fallback to basic priorities
+    if (otherController.GetPriority() > mergePriority)
+    {
+      return false;
+    }
+    return true;
   }
 }
