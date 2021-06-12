@@ -8,6 +8,10 @@ public class Attacher : MonoBehaviour
   [Tooltip("Attachers with higher priority become parents when merging with other attachers. Has less precendence than movement priority.")]
   [SerializeField] int mergePriority = 0;
 
+  // state
+  // used to keep distance relative to parent always locked
+  Vector3 lockedPosition;
+
   // controller getter
   public Func<Controller> GetController;
 
@@ -74,10 +78,10 @@ public class Attacher : MonoBehaviour
     float desiredDistance = otherExtent + GetComponent<Collider2D>().bounds.extents.x;
     desiredDistance += MergeJudge.snapGap;
 
-    Vector3 desiredPosition = otherTransform.position + (Vector3)side * desiredDistance;
+    lockedPosition = otherTransform.position + (Vector3)side * desiredDistance;
 
     // now that we know where this object should be, we translate the parent so that it gets there
-    Vector3 displacement = desiredPosition - transform.position;
+    Vector3 displacement = lockedPosition - transform.position;
 
     // snap
     GetController().transform.Translate(displacement);
@@ -115,18 +119,8 @@ public class Attacher : MonoBehaviour
     Attacher otherAttacher = other.gameObject.GetComponent<Attacher>();
     if (otherAttacher)
     {
-      print("blam");
       // when the other attacher request a merge too, the mergeJudge will merge them both
       FindObjectOfType<MergeJudge>().MergeRequest(this, otherAttacher);
     }
-  }
-
-  private void OnCollisionStay2D(Collision2D other)
-  {
-    if (other.gameObject.CompareTag("Debug"))
-    {
-      GetController().GetComponent<Rigidbody2D>().velocity *= new Vector2(1, 0);
-    }
-
   }
 }

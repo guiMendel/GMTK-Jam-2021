@@ -11,8 +11,19 @@ public class Controller : MonoBehaviour
 
   // state
   bool moving = false;
+  // Update sets this and FixedUpdate reads from and resets it
+  bool jumpInThisUpdate = false;
 
   public bool IsMoving() { return moving; }
+
+  public float GetTotalMass()
+  {
+    Rigidbody2D[] bodies = GetComponentsInChildren<Rigidbody2D>();
+
+    return bodies
+      .Select((Rigidbody2D body) => body.mass)
+      .Aggregate((float mass1, float mass2) => mass1 + mass2);
+  }
 
   // Start is called before the first frame update
   void Start()
@@ -26,7 +37,7 @@ public class Controller : MonoBehaviour
     // take commands
 
     // jump command
-    if (Input.GetButtonDown("Jump")) Jump();
+    if (Input.GetButtonDown("Jump")) jumpInThisUpdate = true;
 
     // walk command. Registers if character is walking or not
     if (Input.GetAxis("Horizontal") != 0) moving = Walk(Input.GetAxis("Horizontal"));
@@ -34,6 +45,15 @@ public class Controller : MonoBehaviour
 
     // fire command
     if (Input.GetButtonDown("Fire1")) Fire();
+  }
+
+  private void FixedUpdate()
+  {
+    if (jumpInThisUpdate)
+    {
+      Jump();
+      jumpInThisUpdate = false;
+    }
   }
 
   private void Fire()
@@ -65,7 +85,7 @@ public class Controller : MonoBehaviour
     Jumper jumper = GetComponentInChildren<Jumper>();
 
     // make sure character is grounded
-    if (jumper && IsGrounded()) jumper.Jump(body);
+    if (jumper && IsGrounded()) jumper.Jump(this);
   }
 
   public bool IsGrounded()

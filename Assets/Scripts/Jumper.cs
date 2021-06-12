@@ -7,8 +7,11 @@ public class Jumper : MonoBehaviour
 {
   [SerializeField] float jumpPower = 1000f;
 
-  public void Jump(Rigidbody2D body)
+  public void Jump(Controller controller)
   {
-    body.velocity += Vector2.up * jumpPower;
+    controller.GetComponent<Rigidbody2D>().AddForce(
+      Vector2.up * jumpPower * controller.GetTotalMass(),
+      ForceMode2D.Impulse
+    );
   }
 }
