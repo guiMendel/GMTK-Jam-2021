@@ -6,16 +6,11 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-  [Tooltip("Controllers with higher priority become parents when merging with other controllers. Has less precendence than movement priority.")]
-  [SerializeField] int mergePriority = 0;
-
   // stored refs
   Rigidbody2D body;
 
   // state
   bool moving = false;
-
-  public int GetPriority() { return mergePriority; }
 
   public bool IsMoving() { return moving; }
 
@@ -69,7 +64,7 @@ public class Controller : MonoBehaviour
     // find a jumper
     Jumper jumper = GetComponentInChildren<Jumper>();
 
-    // make sure characer is grounded
+    // make sure character is grounded
     if (jumper && IsGrounded()) jumper.Jump(body);
   }
 
@@ -77,6 +72,8 @@ public class Controller : MonoBehaviour
   {
     // take all colliders
     Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
+
+    // print("all colliders length: " + colliders.Length.ToString());
 
     // minimum height
     float height = float.MaxValue;
@@ -100,6 +97,8 @@ public class Controller : MonoBehaviour
       else if (colliderHeight == height) downmostColliders.Add(collider);
     }
 
+    // print("filtered colliders length: " + downmostColliders.Count.ToString());
+
     // if at least one of the colliders is grounded, we return true
     return downmostColliders.Any((Collider2D collider) =>
     {
@@ -109,64 +108,12 @@ public class Controller : MonoBehaviour
       // margin of distance between character and ground we accept
       float errorMargin = 0.1f;
 
+      // print("collider size: " + colliderSize.ToString());
+
+      // print("probe: " + (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0).ToString());
+
       // probe the ground
       return (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0);
     });
-  }
-
-  private void OnCollisionEnter2D(Collision2D other)
-  {
-    // merge if its another controller
-    if (other.gameObject.GetComponent<Controller>()) Merge(other.gameObject);
-  }
-
-  private void Merge(GameObject otherObject)
-  {
-    // get other controller
-    Controller otherController = otherObject.GetComponent<Controller>();
-
-    // stops if the other has higher priority
-    if (!HigherPriorityThan(otherController)) {
-      enabled = false;
-      return;
-    }
-
-    // Set this as its parent
-    otherObject.transform.parent = transform;
-
-    // disable its sprite renderer
-    otherObject.GetComponent<SpriteRenderer>().enabled = false;
-
-    // disable its rigidbody
-    otherObject.GetComponent<Rigidbody2D>().isKinematic = true;
-
-    // disable its collider
-    otherObject.GetComponent<BoxCollider2D>().enabled = false;
-  }
-
-  private bool HigherPriorityThan(Controller otherController)
-  {
-    // grounded characters have higher priority
-    bool selfGrounded = IsGrounded(), otherGrounded = otherController.IsGrounded();
-
-    // if self isnt grounded but other is
-    if (!selfGrounded && otherGrounded) return false;
-    // if self is grounded and other isnt
-    else if (selfGrounded && !otherGrounded) return true;
-
-    // moving characters have second higher priority
-    bool otherMoving = otherController.IsMoving();
-
-    // if self isnt moving but other is
-    if (!moving && otherMoving) return false;
-    // if self is moving and other isnt
-    else if (moving && !otherMoving) return true;
-
-    // fallback to basic priorities
-    if (otherController.GetPriority() > mergePriority)
-    {
-      return false;
-    }
-    return true;
   }
 }
