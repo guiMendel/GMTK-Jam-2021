@@ -145,6 +145,6 @@ public class BadMushroom : MonoBehaviour
 
   private void OnCollisionEnter2D(Collision2D other)
   {
-    if (other.gameObject.GetComponent<Projectile>()) Die();
+    if (other.gameObject.CompareTag("Hazard")) Die();
   }
 }

@@ -46,6 +46,12 @@ TagManager:
   - name: Debug
     uniqueID: 3960589709
     locked: 0
+  - name: Backscene
+    uniqueID: 2832074805
+    locked: 0
+  - name: Platforms
+    uniqueID: 4157926119
+    locked: 0
   - name: Game Scene
     uniqueID: 1693190443
     locked: 0
