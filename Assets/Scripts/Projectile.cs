@@ -20,10 +20,11 @@ public class Projectile : MonoBehaviour
     Vector3 thisPos = transform.position;
     target.x = target.x - thisPos.x;
     target.y = target.y - thisPos.y;
-    float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
-    transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+    float angle = Mathf.Atan2(target.y, target.x);
+    // transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
 
     // Fire
-    body.AddForce(transform.up * initialForce);
+    // body.AddForce(transform.up * initialForce);
+    body.AddForce(new Vector2(Mathf.Cos(angle) * initialForce, Mathf.Sin(angle) * initialForce));
   }
 }

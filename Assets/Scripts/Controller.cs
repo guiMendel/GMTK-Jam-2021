@@ -59,7 +59,7 @@ public class Controller : MonoBehaviour
   private void Fire()
   {
     // find a shooter
-    GetComponentInChildren<Shooter>()?.Fire(transform.position);
+    GetComponentInChildren<Shooter>()?.Fire();
   }
 
   private void Walk()
