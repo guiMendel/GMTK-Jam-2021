@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2816073780224354233}
   - component: {fileID: 786168728788554936}
   - component: {fileID: 3526566402488748244}
+  - component: {fileID: -6945339684164110836}
   m_Layer: 9
   m_Name: Mushroom
   m_TagString: Untagged
@@ -101,6 +102,25 @@ MonoBehaviour:
   cooldown: 1
   projectilePrefab: {fileID: 40739750806899709, guid: f18b3ca958f48954cb6b77960b9ee49e, type: 3}
   shootFrom: {fileID: 3930066971401188603}
+--- !u!95 &-6945339684164110836
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741542895195487426}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 24526a50f4b3c2443a1e41e3762bf5c6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6320310786464335106
 GameObject:
   m_ObjectHideFlags: 0

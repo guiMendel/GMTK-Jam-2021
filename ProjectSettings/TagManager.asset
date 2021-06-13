@@ -48,3 +48,6 @@ TagManager:
   - name: Game Scene
     uniqueID: 1693190443
     locked: 0
+  - name: Projectiles
+    uniqueID: 2350837675
+    locked: 0

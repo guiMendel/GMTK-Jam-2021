@@ -18,18 +18,50 @@ public class BadMushroom : MonoBehaviour
   [Tooltip("Where the projectiles come from")]
   [SerializeField] Transform shootFrom;
 
-  // state
+  // STATE
 
   // all the characters this shroom can shoot at
   Transform[] characters;
+  // the target its shooting at right now
+  Transform currentTarget;
   // if his cooldown is up
   bool readyToShoot = true;
+
+  // STORED REFS
+
+  Animator animator;
+  SpriteRenderer spriteRenderer;
+
+  public void Shoot()
+  {
+    // Safeguard
+    if (!projectilePrefab) throw new Exception("No projectile prefab set for the mushroom");
+    if (!currentTarget) return;
+
+    // Instantiate
+    Projectile projectile = Instantiate(projectilePrefab, shootFrom.position, Quaternion.identity);
+
+    // Set projectile target
+    projectile.SetTarget(currentTarget.position);
+
+    // forget this target
+    currentTarget = null;
+  }
+
+  public void FlipSprite(bool flip)
+  {
+    spriteRenderer.flipX = flip;
+  }
 
   private void Start()
   {
     // find all characters
     characters = FindObjectsOfType<Controller>().Select(controller => controller.transform).ToArray();
     print(characters);
+
+    // get refs
+    animator = GetComponent<Animator>();
+    spriteRenderer = GetComponent<SpriteRenderer>();
   }
 
   private void Update()
@@ -54,23 +86,21 @@ public class BadMushroom : MonoBehaviour
     // stop if it's not within range
     if (distance > range) return;
 
-    // shoot
-    ShootAt(target);
+    AnimationShoot(target);
   }
 
-  private void ShootAt(Transform target)
+  private void AnimationShoot(Transform target)
   {
-    // Safeguard
-    if (!projectilePrefab) throw new Exception("No projectile prefab set for the mushroom");
-
-    // Instantiate
-    Projectile projectile = Instantiate(projectilePrefab, shootFrom.position, Quaternion.identity);
-
-    // Set projectile target
-    projectile.SetTarget(target.position);
+    // shoot
+    currentTarget = target;
+    animator.SetTrigger("Shoot");
 
     // count cooldown
     StartCoroutine(CountCooldown());
+
+    // flip sprite if necessary
+    if (currentTarget.position.x > transform.position.x) FlipSprite(true);
+    else FlipSprite(false);
   }
 
   private IEnumerator CountCooldown()
