@@ -1,19 +1,25 @@
 fileFormatVersion: 2
-guid: 7051468fcc29fbe438263942008186f7
+guid: 09a79e57cdc2503489fc6f68bfe937c9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1379284931105554088
-    second: worm_0
+      213: 271460073149416175
+    second: slime_sheet1_0
   - first:
-      213: -897107974938402584
-    second: worm_1
+      213: 6652324044355926575
+    second: slime_sheet1_1
   - first:
-      213: 3333537666500559670
-    second: worm_2
+      213: 8864208869979818931
+    second: slime_sheet1_2
   - first:
-      213: -7591865148917879237
-    second: worm_3
+      213: -3596422619937520213
+    second: slime_sheet1_3
+  - first:
+      213: -7824698547118113332
+    second: slime_sheet1_4
+  - first:
+      213: -5296559173183723496
+    second: slime_sheet1_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -115,7 +121,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: worm_0
+      name: slime_sheet1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -129,14 +135,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8518765b9abcbdce0800000000000000
-      internalID: -1379284931105554088
+      spriteID: fe2c5ce8f7b64c300800000000000000
+      internalID: 271460073149416175
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: worm_1
+      name: slime_sheet1_1
       rect:
         serializedVersion: 2
         x: 32
@@ -150,14 +156,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8e060a4cc05dc83f0800000000000000
-      internalID: -897107974938402584
+      spriteID: f2aff9a097dc15c50800000000000000
+      internalID: 6652324044355926575
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: worm_2
+      name: slime_sheet1_2
       rect:
         serializedVersion: 2
         x: 64
@@ -171,14 +177,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 633862988da134e20800000000000000
-      internalID: 3333537666500559670
+      spriteID: 3bb830ea00ff30b70800000000000000
+      internalID: 8864208869979818931
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: worm_3
+      name: slime_sheet1_3
       rect:
         serializedVersion: 2
         x: 96
@@ -192,8 +198,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b3ee418ded644a690800000000000000
-      internalID: -7591865148917879237
+      spriteID: ba5c17c8ea0f61ec0800000000000000
+      internalID: -3596422619937520213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_sheet1_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccd7280e026196390800000000000000
+      internalID: -7824698547118113332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_sheet1_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8182c8e8e77de76b0800000000000000
+      internalID: -5296559173183723496
       vertices: []
       indices: 
       edges: []
