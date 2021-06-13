@@ -23,4 +23,6 @@ public class LevelHandler : MonoBehaviour
     if (scene < SceneManager.sceneCount - 1) SceneManager.LoadScene(scene + 1);
     SceneManager.LoadScene(0);
   }
+
+  public void QuitGame() { Application.Quit(); }
 }
