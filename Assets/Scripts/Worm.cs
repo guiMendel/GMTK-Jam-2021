@@ -12,6 +12,12 @@ public class Worm : MonoBehaviour
   [Tooltip("The speed at which it moves")]
   [SerializeField] float moveSpeed = 20f;
 
+  [Tooltip("Plays on death")]
+  [SerializeField] GameObject deathVFX;
+
+  [Tooltip("VFX duration")]
+  [SerializeField] float vfxDuration = 1f;
+
   // STATE
 
   // all the characters this worm can chase
@@ -84,7 +90,8 @@ public class Worm : MonoBehaviour
     if (!currentTarget) return;
 
     // stop if it's not within range
-    if (Vector3.Distance(transform.position, currentTarget.position) > range) {
+    if (Vector3.Distance(transform.position, currentTarget.position) > range)
+    {
       StopChasing();
       return;
     }
@@ -111,4 +118,23 @@ public class Worm : MonoBehaviour
     animator.SetBool("Walking", false);
     currentTarget = null;
   }
+
+
+  private void Die()
+  {
+    // vfx
+    if (deathVFX)
+    {
+      GameObject vfx = Instantiate(deathVFX, transform.position, Quaternion.identity);
+      Destroy(vfx, vfxDuration);
+    }
+
+    Destroy(gameObject);
+  }
+
+  private void OnCollisionEnter2D(Collision2D other)
+  {
+    if (other.gameObject.GetComponent<Projectile>()) Die();
+  }
+
 }

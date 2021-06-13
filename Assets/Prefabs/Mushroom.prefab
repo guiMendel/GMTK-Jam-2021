@@ -104,6 +104,8 @@ MonoBehaviour:
   cooldown: 1
   projectilePrefab: {fileID: 40739750806899709, guid: f18b3ca958f48954cb6b77960b9ee49e, type: 3}
   shootFrom: {fileID: 3930066971401188603}
+  deathVFX: {fileID: 7780525984504542193, guid: 54e130904c9b6144d92e3557003fbef1, type: 3}
+  vfxDuration: 1
 --- !u!95 &-6945339684164110836
 Animator:
   serializedVersion: 3

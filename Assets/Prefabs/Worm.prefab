@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4086730179886922063}
   - component: {fileID: 4086730179886922062}
   - component: {fileID: 4086730179886922061}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Worm
   m_TagString: Hazard
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &4086730179886922061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,3 +184,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 7
   moveSpeed: 80
+  deathVFX: {fileID: 7780525984504542193, guid: 54e130904c9b6144d92e3557003fbef1, type: 3}
+  vfxDuration: 1

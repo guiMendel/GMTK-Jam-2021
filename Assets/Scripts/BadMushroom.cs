@@ -18,6 +18,12 @@ public class BadMushroom : MonoBehaviour
   [Tooltip("Where the projectiles come from")]
   [SerializeField] Transform shootFrom;
 
+  [Tooltip("Plays on death")]
+  [SerializeField] GameObject deathVFX;
+
+  [Tooltip("VFX duration")]
+  [SerializeField] float vfxDuration = 1f;
+
   // STATE
 
   // all the characters this shroom can shoot at
@@ -123,5 +129,22 @@ public class BadMushroom : MonoBehaviour
     yield return new WaitForSeconds(cooldown);
 
     readyToShoot = true;
+  }
+
+  private void Die()
+  {
+    // vfx
+    if (deathVFX)
+    {
+      GameObject vfx = Instantiate(deathVFX, transform.position, Quaternion.identity);
+      Destroy(vfx, vfxDuration);
+    }
+
+    Destroy(gameObject);
+  }
+
+  private void OnCollisionEnter2D(Collision2D other)
+  {
+    if (other.gameObject.GetComponent<Projectile>()) Die();
   }
 }
