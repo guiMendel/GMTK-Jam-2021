@@ -20,14 +20,7 @@ public class LevelHandler : MonoBehaviour
   {
     int scene = SceneManager.GetActiveScene().buildIndex;
 
-    try
-    {
-      SceneManager.LoadScene(scene + 1);
-
-    }
-    catch (System.Exception)
-    {
-      SceneManager.LoadScene(0);
-    }
+    if (scene < SceneManager.sceneCount - 1) SceneManager.LoadScene(scene + 1);
+    SceneManager.LoadScene(0);
   }
 }

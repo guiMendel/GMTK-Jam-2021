@@ -1,12 +1,21 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MergeJudge : MonoBehaviour
 {
   public static float snapGap = 0.2f;
+  [SerializeField] float nextLevelDelay = 2f;
+
+  // STORED REFS
+  LevelHandler levelHandler;
 
   // state
+
   List<(Attacher, Attacher)> awaitingMerge;
+  // number of successful merges
+  int mergeCount = 0;
 
   public void MergeRequest(Attacher source, Attacher target)
   {
@@ -42,6 +51,16 @@ public class MergeJudge : MonoBehaviour
 
     // attach the other one to it
     target.AttachTo(merger);
+
+    // count the merge
+    mergeCount++;
+    if (mergeCount >= 3) StartCoroutine(CompleteLevel());
+  }
+
+  private IEnumerator CompleteLevel()
+  {
+    yield return new WaitForSeconds(nextLevelDelay);
+    levelHandler.NextLevel();
   }
 
   private void Start()
@@ -59,6 +78,7 @@ public class MergeJudge : MonoBehaviour
     }
 
     awaitingMerge = new List<(Attacher, Attacher)>();
+    levelHandler = FindObjectOfType<LevelHandler>();
   }
 
   private (Attacher merger, Attacher target) SortByPriority(Attacher attacher1, Attacher attacher2)
