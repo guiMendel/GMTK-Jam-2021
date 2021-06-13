@@ -27,6 +27,8 @@ public class Projectile : MonoBehaviour
 
     // Fire
     // body.AddForce(transform.up * initialForce);
+    // ignore mass
+    initialForce *= body.mass;
     body.AddForce(new Vector2(Mathf.Cos(angle) * initialForce, Mathf.Sin(angle) * initialForce));
   }
 
