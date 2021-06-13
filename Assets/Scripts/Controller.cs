@@ -6,6 +6,15 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
+  [Tooltip("If on, character never dies")]
+  [SerializeField] bool godMode = false;
+
+  [Tooltip("Plays on death")]
+  [SerializeField] GameObject deathVFX;
+
+  [Tooltip("Duration of vfx")]
+  [SerializeField] float vfxDuration = 1f;
+
   // stored refs
   Rigidbody2D body;
 
@@ -96,5 +105,28 @@ public class Controller : MonoBehaviour
       // probe the ground
       return (collider.Raycast(Vector2.down, new RaycastHit2D[1], colliderSize + errorMargin) > 0);
     });
+  }
+
+  private void Die()
+  {
+    // vfx
+    if (deathVFX)
+    {
+      GameObject vfx = Instantiate(deathVFX, transform.position, Quaternion.identity);
+      Destroy(vfx, vfxDuration);
+    }
+
+    // deparent any other blobs
+    foreach (var transform in transform.GetComponentsInChildren<Transform>())
+    {
+      transform.parent = null;
+    }
+
+    Destroy(gameObject);
+  }
+
+  private void OnCollisionEnter2D(Collision2D other)
+  {
+    if (other.gameObject.CompareTag("Hazard") && !godMode) Die();
   }
 }

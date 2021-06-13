@@ -74,14 +74,26 @@ public class BadMushroom : MonoBehaviour
     // if still on cooldown, stop
     if (!readyToShoot) return;
 
-    // find the closest character
-    (Transform target, float distance) =
-      characters
-      // get their distances
-      .Select(character => (character, Vector3.Distance(transform.position, character.position)))
-      // order by the distance
-      .OrderBy(((Transform transform, float distance) character) => character.distance)
-      .First();
+    Transform target;
+    float distance;
+
+    try
+    {
+      // find the closest character
+      (target, distance) =
+        characters
+        // get their distances
+        .Select(character => (character, Vector3.Distance(transform.position, character.position)))
+        // order by the distance
+        .OrderBy(((Transform transform, float distance) character) => character.distance)
+        .First();
+
+    }
+    // If one of them is dead, dont' bother
+    catch (MissingReferenceException)
+    {
+      return;
+    }
 
     // stop if it's not within range
     if (distance > range) return;

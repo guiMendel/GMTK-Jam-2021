@@ -135,6 +135,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd46e6143fab7fb418d2b7accf481c11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  godMode: 0
+  deathVFX: {fileID: 7780525984504542193, guid: 8adf9e24d8f72af4a9610210c3b01cf9, type: 3}
+  vfxDuration: 1
 --- !u!114 &6245579643793325282
 MonoBehaviour:
   m_ObjectHideFlags: 0
