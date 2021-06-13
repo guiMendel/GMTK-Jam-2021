@@ -5,6 +5,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
   [SerializeField] float initialForce = 20f;
+  [SerializeField] GameObject hitVFX;
+  [SerializeField] float vfxDuration = 1f;
 
   // stored refs
   Rigidbody2D body;
@@ -26,5 +28,18 @@ public class Projectile : MonoBehaviour
     // Fire
     // body.AddForce(transform.up * initialForce);
     body.AddForce(new Vector2(Mathf.Cos(angle) * initialForce, Mathf.Sin(angle) * initialForce));
+  }
+
+  private void OnCollisionEnter2D(Collision2D other)
+  {
+    // vfx
+    if (hitVFX)
+    {
+      var vfx = Instantiate(hitVFX, transform.position, Quaternion.identity);
+      Destroy(vfx, vfxDuration);
+    }
+
+    // vanish
+    Destroy(gameObject);
   }
 }
