@@ -24,7 +24,7 @@ public class Attacher : MonoBehaviour
     // Physics2D.IgnoreCollision(GetComponent<Collider2D>(), merger.GetComponent<Collider2D>());
 
     // snap to it
-    SnapTo(merger.transform);
+    CreateJointWith(merger.transform);
 
     // Now we need to set this attacher's main parent as a child of the merger's main parent
 
@@ -48,43 +48,6 @@ public class Attacher : MonoBehaviour
 
     // GetComponent<SpriteRenderer>().enabled = false;
 
-  }
-
-  private void SnapTo(Transform otherTransform)
-  {
-    // float yDistance = otherTransform.position.y - transform.position.y;
-    // float xDistance = otherTransform.position.x - transform.position.x;
-
-    // // the side to which we will snap
-    // Vector2 side;
-
-    // // snap to the sides
-    // if (Mathf.Abs(yDistance) < Mathf.Abs(xDistance))
-    // {
-    //   side = xDistance < 0 ? Vector2.right : Vector2.left;
-    // }
-    // // snap above or below
-    // else
-    // {
-    //   side = yDistance < 0 ? Vector2.up : Vector2.down;
-    // }
-
-    // // adjust the bigger distance to be exactly on the edge of the collider
-    // float otherExtent = otherTransform.GetComponent<Collider2D>().bounds.extents.x;
-    // float desiredDistance = otherExtent + GetComponent<Collider2D>().bounds.extents.x;
-    // desiredDistance += MergeJudge.snapGap;
-
-    // var desiredPosition = otherTransform.position + (Vector3)side * desiredDistance;
-
-    // // now that we know where this object should be, we translate the parent so that it gets there
-    // Vector2 displacement = (Vector2)(desiredPosition - transform.position);
-
-    // // snap
-    // Rigidbody2D controllerBody = GetController().GetComponent<Rigidbody2D>();
-    // controllerBody.MovePosition((Vector2)controllerBody.transform.position + displacement);
-
-    // create a joint between the two
-    CreateJointWith(otherTransform);
   }
 
   private void CreateJointWith(Transform otherTransform)

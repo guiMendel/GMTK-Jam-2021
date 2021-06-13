@@ -82,35 +82,8 @@ public class Controller : MonoBehaviour
     // take all colliders
     Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
 
-    // print("all colliders length: " + colliders.Length.ToString());
-
-    // minimum height
-    float height = float.MaxValue;
-
-    // pick the downmost ones
-    List<Collider2D> downmostColliders = new List<Collider2D>();
-
-    foreach (Collider2D collider in colliders)
-    {
-      float colliderHeight = collider.transform.position.y;
-
-      if (colliderHeight < height)
-      {
-        height = colliderHeight;
-
-        // flush all previous results
-        downmostColliders.Clear();
-
-        downmostColliders.Add(collider);
-      }
-      else if (colliderHeight == height) downmostColliders.Add(collider);
-    }
-
-    // print("filtered colliders length: " + downmostColliders.Count.ToString());
-    // print("filtered colliders sample: " + downmostColliders[0].GetComponent<Attacher>().GetPriority());
-
     // if at least one of the colliders is grounded, we return true
-    return downmostColliders.Any((Collider2D collider) =>
+    return colliders.Any((Collider2D collider) =>
     {
       // get the collider's size
       float colliderSize = collider.bounds.extents.y;
